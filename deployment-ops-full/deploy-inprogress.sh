@@ -4,8 +4,8 @@ set -e
 # Credentials
 azureClientID=$CLIENT_ID
 azureClientSecret=$SECRET
-sqlServerUser=sqladmin
-sqlServePassword=Password2020!
+# sqlServerUser=sqladmin
+# sqlServePassword=Password2020!
 
 # Azure and container image location
 azureResourceGroup=$RESOURCE_GROUP_NAME
@@ -13,7 +13,7 @@ containerRegistry=neilpeterson
 containerVersion=v2
 
 # Tailwind deployment
-tailwindInfrastructure=TailwindTraders-Backend/Deploy/deployment.json
+# tailwindInfrastructure=TailwindTraders-Backend/Deploy/deployment.json
 tailwindCharts=TailwindTraders-Backend/Deploy/helm
 tailwindChartValuesScript=tailwind-reference-deployment-sandbox/deployment-ops-full/helm-values/generate-config.ps1
 tailwindChartValues=/values.yaml
@@ -21,7 +21,7 @@ tailwindWebImages=TailwindTraders-Backend/Deploy/tt-images
 tailwindServiceAccount=TailwindTraders-Backend/Deploy/helm/ttsa.yaml
 
 # Other values
-azureDevOps=$AZURE_DEVOPS
+# azureDevOps=$AZURE_DEVOPS
 
 # Print out tail command
 printf "\n*** To tail logs, run this command. ***\n"
@@ -36,28 +36,28 @@ git clone https://github.com/microsoft/TailwindTraders-Backend.git
 git -C TailwindTraders-Backend checkout ed86d5f
 
 # Deploy AKS and Tailwind application
-printf "\n*** Deploying AKS and Tailwind application. ***\n"
+# printf "\n*** Deploying AKS and Tailwind application. ***\n"
 
-az group deployment create -g $azureResourceGroup --template-file $tailwindInfrastructure \
-  --parameters servicePrincipalId=$azureClientID servicePrincipalSecret=$azureClientSecret \
-  sqlServerAdministratorLogin=$sqlServerUser sqlServerAdministratorLoginPassword=$sqlServePassword \
-  aksVersion=1.14.5 pgversion=10
+# az group deployment create -g $azureResourceGroup --template-file $tailwindInfrastructure \
+#   --parameters servicePrincipalId=$azureClientID servicePrincipalSecret=$azureClientSecret \
+#   sqlServerAdministratorLogin=$sqlServerUser sqlServerAdministratorLoginPassword=$sqlServePassword \
+#   aksVersion=1.14.5 pgversion=10
 
 # Create Azure DevOps orginization and Project
-printf "\n*** Deploying Azure DevOps. ***\n"
+# printf "\n*** Deploying Azure DevOps. ***\n"
 
-az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-azd.json  \
-  --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS
+# az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-azd.json  \
+#   --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS
 
 # Create logic apps and API connections
-printf "\n*** Deploying Logic Apps and API connections. ***\n"
+# printf "\n*** Deploying Logic Apps and API connections. ***\n"
 
-AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
-AZURE_STORAGE_KEY=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
+# AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
+# AZURE_STORAGE_KEY=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
 
-az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-logic-apps.json  \
-  --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS \
-  storageAccountName=$AZURE_STORAGE_ACCT storageAccountKey=$AZURE_STORAGE_KEY
+# az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-logic-apps.json  \
+#   --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS \
+#   storageAccountName=$AZURE_STORAGE_ACCT storageAccountKey=$AZURE_STORAGE_KEY
 
 # Application Insights (using preview extension)
 # Can we remove this?
