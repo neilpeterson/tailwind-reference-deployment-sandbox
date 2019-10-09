@@ -26,8 +26,6 @@ echo "*************** Container logs ***************"
 echo "az container logs --name bootstrap-container --resource-group $azureResourceGroup --follow"
 echo "*************** Connection Information ***************"
 
-sleep 20m
-
 # Get backend code
 printf "\n*** Cloning Tailwind code repository... ***\n"
 
@@ -98,20 +96,23 @@ helm install --name web -f TailwindTraders-Website/Deploy/helm/gvalues.yaml --se
 # Copy website images to storage
 printf "\n***Copying application images (graphics) to Azure storage.***\n"
 
-STORAGE=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
+AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
 BLOB_ENDPOINT=$(az storage account list -g $azureResourceGroup --query [].primaryEndpoints.blob -o tsv)
-CONNECTION_STRING=$(az storage account show-connection-string -n $STORAGE -g $azureResourceGroup -o tsv)
+CONNECTION_STRING=$(az storage account show-connection-string -n $AZURE_STORAGE_ACCT -g $azureResourceGroup -o tsv)
 az storage container create --name "coupon-list" --public-access blob --connection-string $CONNECTION_STRING
 az storage container create --name "product-detail" --public-access blob --connection-string $CONNECTION_STRING
 az storage container create --name "product-list" --public-access blob --connection-string $CONNECTION_STRING
 az storage container create --name "profiles-list" --public-access blob --connection-string $CONNECTION_STRING
-az storage blob upload-batch --destination $BLOB_ENDPOINT --destination coupon-list  --source $tailwindWebImages/coupon-list --account-name $STORAGE
-az storage blob upload-batch --destination $BLOB_ENDPOINT --destination product-detail --source $tailwindWebImages/product-detail --account-name $STORAGE
-az storage blob upload-batch --destination $BLOB_ENDPOINT --destination product-list --source $tailwindWebImages/product-list --account-name $STORAGE
-az storage blob upload-batch --destination $BLOB_ENDPOINT --destination profiles-list --source $tailwindWebImages/profiles-list --account-name $STORAGE
+az storage blob upload-batch --destination $BLOB_ENDPOINT --destination coupon-list  --source $tailwindWebImages/coupon-list --account-name $AZURE_STORAGE_ACCT
+az storage blob upload-batch --destination $BLOB_ENDPOINT --destination product-detail --source $tailwindWebImages/product-detail --account-name $AZURE_STORAGE_ACCT
+az storage blob upload-batch --destination $BLOB_ENDPOINT --destination product-list --source $tailwindWebImages/product-list --account-name $AZURE_STORAGE_ACCT
+az storage blob upload-batch --destination $BLOB_ENDPOINT --destination profiles-list --source $tailwindWebImages/profiles-list --account-name $AZURE_STORAGE_ACCT
 
 # Create oncall table
-pwsh tailwind-reference-deployment-sandbox/deployment-ops-full/storage.ps1 -azureResourceGroup $azureResourceGroup -storageAccountName $STORAGE
+AZURE_STORAGE_ACCT=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
+apt-get install python-pip
+pip install azure
+python3 azure-table.py
 
 # Notes
 echo "*************** Connection Information ***************"
