@@ -30,7 +30,7 @@
 		"containerName": "logs",
 		"deploymentImage": "neilpeterson/itt-bootstrap:2.0",
 		"sourceRepo": "https://github.com/neilpeterson/tailwind-reference-deployment-sandbox.git",
-		"entrypoint": "/deployment-ops-full/deploy-inprogress.sh"
+		"entrypoint": "/deployment-ops-full/deploy.sh"
 	},
 	"resources": [{
 			"type": "Microsoft.ManagedIdentity/userAssignedIdentities",
@@ -50,6 +50,72 @@
 				"principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('identityName')), '2015-08-31-preview').principalId]",
 				"scope": "[resourceGroup().id]",
 				"principalType": "ServicePrincipal"
+			}
+		},
+		{
+			"name": "linkedTemplateTailwind",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-tailwind.json"
+				},
+				"parameters": {
+					"servicePrincipalId": {
+						"value": "[parameters('servicePrincipalId')]"
+					},
+					"servicePrincipalSecret": {
+						"value": "[parameters('servicePrincipalSecret')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "linkedTemplateDevOps",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-azd.json"
+				},
+				"parameters": {
+					"azureDevOpsOrgName": {
+						"value": "[parameters('azureDevOpsOrgName')]"
+					},
+					"azureDevOpsProject": {
+						"value": "[parameters('azureDevOpsOrgName')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "linkedTemplateLogicApps",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'linkedTemplateTailwind')]"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-logic-apps.json"
+				},
+				"parameters": {
+					"azureDevOpsOrgName": {
+						"value": "[parameters('azureDevOpsOrgName')]"
+					},
+					"azureDevOpsProject": {
+						"value": "[parameters('azureDevOpsOrgName')]"
+					},
+					"storageAccountName": {
+						"value": "[reference('linkedTemplateTailwind').outputs.storageAccountName.value]"
+					},
+					"storageAccountKey": {
+						"value": "[reference('linkedTemplateTailwind').outputs.storageAccountKey.value]"
+					}
+				}
 			}
 		},
 		{
@@ -112,72 +178,6 @@
 						]
 					}
 				}]
-			}
-		},
-		{
-			"name": "linkedTemplateDevOps",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-azd.json"
-				},
-				"parameters": {
-					"azureDevOpsOrgName": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					},
-					"azureDevOpsProject": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					}
-				}
-			}
-		},
-		{
-			"name": "linkedTemplateLogicApps",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'linkedTemplateTailwind')]"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-logic-apps.json"
-				},
-				"parameters": {
-					"azureDevOpsOrgName": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					},
-					"azureDevOpsProject": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					},
-					"storageAccountName": {
-						"value": "[reference('linkedTemplateTailwind').outputs.storageAccountName.value]"
-					},
-					"storageAccountKey": {
-						"value": "test123"
-					}
-				}
-			}
-		},
-		{
-			"name": "linkedTemplateTailwind",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-tailwind.json"
-				},
-				"parameters": {
-					"servicePrincipalId": {
-						"value": "[parameters('servicePrincipalId')]"
-					},
-					"servicePrincipalSecret": {
-						"value": "[parameters('servicePrincipalSecret')]"
-					}
-				}
 			}
 		}
 	],
