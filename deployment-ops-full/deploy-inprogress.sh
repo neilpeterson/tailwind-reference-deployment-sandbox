@@ -5,7 +5,7 @@ set -e
 azureClientID=$CLIENT_ID
 azureClientSecret=$SECRET
 # sqlServerUser=sqladmin
-# sqlServePassword=Password2020!
+sqlServePassword=Password2020!
 
 # Azure and container image location
 azureResourceGroup=$RESOURCE_GROUP_NAME
