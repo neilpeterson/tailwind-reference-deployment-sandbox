@@ -107,48 +107,14 @@
 							{
 								"name": "SECRET",
 								"secureValue": "[parameters('servicePrincipalSecret')]"
+							},
+							{
+								"name": "AZURE_DEVOPS",
+								"secureValue": "[parameters('azureDevOpsOrgName')]"
 							}
 						]
 					}
 				}]
-			}
-		},
-		{
-			"name": "linkedTemplateDevOps",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-azd.json"
-				},
-				"parameters": {
-					"azureDevOpsOrgName": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					},
-					"azureDevOpsProject": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					}
-				}
-			}
-		},
-		{
-			"name": "linkedTemplateLogicApps",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-logic-apps.json"
-				},
-				"parameters": {
-					"azureDevOpsOrgName": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					},
-					"azureDevOpsProject": {
-						"value": "[parameters('azureDevOpsOrgName')]"
-					}
-				}
 			}
 		}
 	],

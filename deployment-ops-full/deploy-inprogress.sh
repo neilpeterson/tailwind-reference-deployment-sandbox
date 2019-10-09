@@ -20,6 +20,9 @@ tailwindChartValues=/values.yaml
 tailwindWebImages=TailwindTraders-Backend/Deploy/tt-images
 tailwindServiceAccount=TailwindTraders-Backend/Deploy/helm/ttsa.yaml
 
+# Other values
+azureDevOps=$AZURE_DEVOPS
+
 # Print out tail command
 printf "\n*** To tail logs, run this command... ***\n"
 echo "*************** Container logs ***************"
@@ -115,6 +118,15 @@ apt-get update -y
 apt-get -y install python3-pip
 pip3 install azure.cosmosdb.table
 python3 tailwind-reference-deployment-sandbox/deployment-ops-full/azure-table.py
+
+# Create Azure DevOps orginization and Project
+az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-azd.json  \
+  --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS
+
+# Create logic apps and API connections
+az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-logic-apps.json  \
+  --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS \
+  storageAccountName=$AZURE_STORAGE_ACCT storageAccountKey=$AZURE_STORAGE_KEY
 
 # Notes
 echo "*************** Connection Information ***************"
