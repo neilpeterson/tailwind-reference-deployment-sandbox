@@ -117,7 +117,7 @@ helm install --name web -f TailwindTraders-Website/Deploy/helm/gvalues.yaml --se
 # Copy website images to storage
 printf "\n*** Copying application images (graphics) to Azure storage. ***\n"
 
-# AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
+AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
 BLOB_ENDPOINT=$(az storage account list -g $azureResourceGroup --query [].primaryEndpoints.blob -o tsv)
 CONNECTION_STRING=$(az storage account show-connection-string -n $AZURE_STORAGE_ACCT -g $azureResourceGroup -o tsv)
 az storage container create --name "coupon-list" --public-access blob --connection-string $CONNECTION_STRING

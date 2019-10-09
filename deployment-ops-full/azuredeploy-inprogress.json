@@ -153,10 +153,10 @@
 						"value": "[parameters('azureDevOpsOrgName')]"
 					},
 					"storageAccountName": {
-						"value": "[parameters('azureDevOpsOrgName')]"
+						"value": "[reference('linkedTemplateTailwind').outputs.storageAccountName.value]"
 					},
 					"storageAccountKey": {
-						"value": "[parameters('azureDevOpsOrgName')]"
+						"value": "test123"
 					}
 				}
 			}
