@@ -13,10 +13,10 @@ table_service = TableService(account_name=AZURE_STORAGE_ACCT, account_key=AZURE_
 table_service.create_table(table_name)
 
 first = {'PartitionKey': '1', 'RowKey': '1',
-        'email': 'jahand@microsoft.com', 'handle': '@JasonHand', table_name: 'true', 'pagingpref': 'push'}
+        'email': 'jahand@microsoft.com', 'handle': '@JasonHand', table_name: true, 'pagingpref': 'push'}
 
 second = {'PartitionKey': '1', 'RowKey': '2',
-        'email': 'nepeters@microsoft.com', 'handle': '@nepeters', table_name: 'false', 'pagingpref': 'pager'}
+        'email': 'nepeters@microsoft.com', 'handle': '@nepeters', table_name: false, 'pagingpref': 'pager'}
 
 table_service.insert_entity(table_name, first)
 table_service.insert_entity(table_name, second)
