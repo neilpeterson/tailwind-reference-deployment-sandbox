@@ -110,8 +110,8 @@ az storage blob upload-batch --destination $BLOB_ENDPOINT --destination profiles
 
 # Create oncall table
 AZURE_STORAGE_ACCT=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
-apt-get install python-pip
-pip install azure
+apt-get install python-pip -y
+pip install azure.cosmosdb.table
 python3 azure-table.py
 
 # Notes
