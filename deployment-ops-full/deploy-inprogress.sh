@@ -26,6 +26,8 @@ echo "*************** Container logs ***************"
 echo "az container logs --name bootstrap-container --resource-group $azureResourceGroup --follow"
 echo "*************** Connection Information ***************"
 
+sleep 20m
+
 # Get backend code
 printf "\n*** Cloning Tailwind code repository... ***\n"
 
