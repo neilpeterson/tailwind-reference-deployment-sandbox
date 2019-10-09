@@ -19,13 +19,12 @@ tailwindWebImages=TailwindTraders-Backend/Deploy/tt-images
 tailwindServiceAccount=TailwindTraders-Backend/Deploy/helm/ttsa.yaml
 
 # Print out tail command
-printf "\n*** To tail logs, run this command. ***\n"
 echo "*************** Container logs ***************"
 echo "az container logs --name bootstrap-container --resource-group $azureResourceGroup --follow"
 echo "*************** Connection Information ***************"
 
 # Get backend code
-printf "\n*** Cloning Tailwind code repository. ***\n"
+echo "*************** Cloning Tailwind code repository ***************"
 
 git clone https://github.com/microsoft/TailwindTraders-Backend.git
 git -C TailwindTraders-Backend checkout ed86d5f
@@ -38,7 +37,7 @@ git -C TailwindTraders-Backend checkout ed86d5f
 # instrumentationKey=$(az monitor app-insights component show --app tt-app-insights --resource-group $azureResourceGroup --query instrumentationKey -o tsv)
 
 # Create postgres DB, Disable SSL, and set Firewall
-printf "\n*** Create stockdb Postgres database. ***\n"
+echo "*************** Create stockdb Postgres database. ***************"
 
 POSTGRES=$(az postgres server list --resource-group $azureResourceGroup --query [0].name -o tsv)
 az postgres db create -g $azureResourceGroup -s $POSTGRES -n stockdb
@@ -46,7 +45,7 @@ az postgres server update --resource-group $azureResourceGroup --name $POSTGRES 
 az postgres server firewall-rule create --resource-group $azureResourceGroup --server-name $POSTGRES --name AllowAllAzureIps --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
 
 # Install Helm on Kubernetes cluster
-printf "\n*** Installing Tiller on Kubernets cluster. ***\n"
+echo "*************** Installing Tiller on Kubernets cluster. ***************"
 
 AKS_CLUSTER=$(az aks list --resource-group $azureResourceGroup --query [0].name -o tsv)
 az aks get-credentials --name $AKS_CLUSTER --resource-group $azureResourceGroup --admin
@@ -54,17 +53,16 @@ kubectl apply -f https://raw.githubusercontent.com/Azure/helm-charts/master/docs
 helm init --wait --service-account tiller
 
 # Create Kubernetes Service Account
-printf "\n*** Create Helm service account in Kubernetes. ***\n"
+echo "*************** Create Helm service account in Kubernetes. ***************"
 
 kubectl apply -f $tailwindServiceAccount
 
 # Create Helm values file
-printf "\n*** Create Helm values file. ***\n"
-
+echo "*************** Create Helm values file.. ***************"
 pwsh $tailwindChartValuesScript -resourceGroup $azureResourceGroup -sqlPwd $sqlServePassword -outputFile $tailwindChartValues
 
 # Deploy application to Kubernetes
-printf "\n*** Deplpying applications to Kubernetes. ***\n"
+echo "*************** Deplpying applications to Kubernetes. ***************"
 
 INGRESS=$(az aks show -n $AKS_CLUSTER -g $azureResourceGroup --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o tsv)
 pictures=$(az storage account list -g $azureResourceGroup --query [0].primaryEndpoints.blob -o tsv)
@@ -86,7 +84,7 @@ git clone https://github.com/neilpeterson/TailwindTraders-Website.git
 helm install --name web -f TailwindTraders-Website/Deploy/helm/gvalues.yaml --set ingress.protocol=http --set ingress.hosts={$INGRESS} --set image.repository=$containerRegistry/web --set image.tag=v1 TailwindTraders-Website/Deploy/helm/web/
 
 # Copy website images to storage
-printf "\n*** Copying application images (graphics) to Azure storage. ***\n"
+echo "*************** Copy website images to storage. ***************"
 
 AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
 BLOB_ENDPOINT=$(az storage account list -g $azureResourceGroup --query [].primaryEndpoints.blob -o tsv)
@@ -101,11 +99,10 @@ az storage blob upload-batch --destination $BLOB_ENDPOINT --destination product-
 az storage blob upload-batch --destination $BLOB_ENDPOINT --destination profiles-list --source $tailwindWebImages/profiles-list --account-name $AZURE_STORAGE_ACCT
 
 # Create oncall table
-printf "\n*** Creating oncall storage table. ***\n"
+echo "*************** Creating oncall storage table. ***************"
 
 export AZURE_STORAGE_KEY=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
 export AZURE_STORAGE_ACCT=$AZURE_STORAGE_ACCT
-# export AZURE_STORAGE_KEY=$AZURE_STORAGE_KEY
 apt-get update -y
 apt-get -y install python3-pip
 pip3 install azure.cosmosdb.table
