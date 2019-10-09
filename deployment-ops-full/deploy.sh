@@ -29,13 +29,6 @@ echo "*************** Cloning Tailwind code repository ***************"
 git clone https://github.com/microsoft/TailwindTraders-Backend.git
 git -C TailwindTraders-Backend checkout ed86d5f
 
-# Application Insights (using preview extension)
-# Can we remove this?
-# printf "\n*** Configuring Application Insights. ***\n"
-
-# az extension add -n application-insights
-# instrumentationKey=$(az monitor app-insights component show --app tt-app-insights --resource-group $azureResourceGroup --query instrumentationKey -o tsv)
-
 # Create postgres DB, Disable SSL, and set Firewall
 echo "*************** Create stockdb Postgres database. ***************"
 
