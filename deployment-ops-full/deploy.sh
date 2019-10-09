@@ -30,36 +30,12 @@ printf "\n*** Cloning Tailwind code repository. ***\n"
 git clone https://github.com/microsoft/TailwindTraders-Backend.git
 git -C TailwindTraders-Backend checkout ed86d5f
 
-# Deploy AKS and Tailwind application
-# printf "\n*** Deploying AKS and Tailwind application. ***\n"
-
-# az group deployment create -g $azureResourceGroup --template-file $tailwindInfrastructure \
-#   --parameters servicePrincipalId=$azureClientID servicePrincipalSecret=$azureClientSecret \
-#   sqlServerAdministratorLogin=$sqlServerUser sqlServerAdministratorLoginPassword=$sqlServePassword \
-#   aksVersion=1.14.5 pgversion=10
-
-# Create Azure DevOps orginization and Project
-# printf "\n*** Deploying Azure DevOps. ***\n"
-
-# az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-azd.json  \
-#   --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS
-
-# Create logic apps and API connections
-# printf "\n*** Deploying Logic Apps and API connections. ***\n"
-
-# AZURE_STORAGE_ACCT=$(az storage account list -g $azureResourceGroup -o table --query [].name -o tsv)
-# AZURE_STORAGE_KEY=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
-
-# az group deployment create -g $azureResourceGroup --template-file tailwind-reference-deployment-sandbox/deployment-ops-full/azuredeploy-logic-apps.json  \
-#   --parameters azureDevOpsOrgName=$AZURE_DEVOPS azureDevOpsProject=$AZURE_DEVOPS \
-#   storageAccountName=$AZURE_STORAGE_ACCT storageAccountKey=$AZURE_STORAGE_KEY
-
 # Application Insights (using preview extension)
 # Can we remove this?
-printf "\n*** Configuring Application Insights. ***\n"
+# printf "\n*** Configuring Application Insights. ***\n"
 
-az extension add -n application-insights
-instrumentationKey=$(az monitor app-insights component show --app tt-app-insights --resource-group $azureResourceGroup --query instrumentationKey -o tsv)
+# az extension add -n application-insights
+# instrumentationKey=$(az monitor app-insights component show --app tt-app-insights --resource-group $azureResourceGroup --query instrumentationKey -o tsv)
 
 # Create postgres DB, Disable SSL, and set Firewall
 printf "\n*** Create stockdb Postgres database. ***\n"
