@@ -7,7 +7,7 @@ AZURE_STORAGE_ACCT = os.environ['AZURE_STORAGE_ACCT']
 AZURE_STORAGE_KEY = os.environ['AZURE_STORAGE_KEY']
 
 # Table Name
-table_name=oncall
+table_name="oncall"
 
 table_service = TableService(account_name=AZURE_STORAGE_ACCT, account_key=AZURE_STORAGE_KEY)
 table_service.create_table(table_name)
