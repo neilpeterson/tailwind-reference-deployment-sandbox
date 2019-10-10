@@ -128,7 +128,7 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-statusjson"
+					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-status.json"
 				},
 				"parameters": {
 					"siteName": {

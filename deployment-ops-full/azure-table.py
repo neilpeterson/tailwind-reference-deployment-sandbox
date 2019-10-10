@@ -8,9 +8,11 @@ AZURE_STORAGE_KEY = os.environ['AZURE_STORAGE_KEY']
 
 # Table Name
 table_name="oncall"
+status_table_name="statuses"
 
 table_service = TableService(account_name=AZURE_STORAGE_ACCT, account_key=AZURE_STORAGE_KEY)
 table_service.create_table(table_name)
+table_service.create_table(status_table_name)
 
 first = {'PartitionKey': '1', 'RowKey': '1',
         'email': 'jahand@microsoft.com', 'handle': '@JasonHand', 'oncall': True, 'pagingpref': 'push'}
