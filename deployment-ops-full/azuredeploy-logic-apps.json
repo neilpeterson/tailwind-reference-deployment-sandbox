@@ -28,9 +28,9 @@
 		}
 	},
 	"variables": {
-		"name": "ops30main",
-		"assignLogicAppName": "ops30Assign",
-		"attachWorkbookAppName": "ops30AttachWorkbook",
+		"name": "ops20main",
+		"assignLogicAppName": "ops20Assign",
+		"attachWorkbookAppName": "ops20AttachWorkbook",
 		"location": "[resourceGroup().location]"
 	},
 	"resources": [{
