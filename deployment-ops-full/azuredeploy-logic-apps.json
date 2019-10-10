@@ -261,7 +261,7 @@
 									}
 								},
 								"method": "patch",
-								"path": "[concat('/@{encodeURIComponent(''', parameters('azureDevOpsProject'), ''')}/_apis/wit/workitems/$@{encodeURIComponent(''Task'')}')]",
+								"path": "[concat('/@{encodeURIComponent(''', parameters('azureDevOpsProject'), ''')}/_apis/wit/workitems/$@{encodeURIComponent(''Issue'')}')]",
 								"queries": {
 									"account": "[parameters('azureDevOpsOrgName')]"
 								}
@@ -380,7 +380,7 @@
 									"account": "[parameters('azureDevOpsOrgName')]",
 									"areaPathComparison": "Equals",
 									"iterationPathComparison": "Equals",
-									"wiql__System_WorkItemType": "Task"
+									"wiql__System_WorkItemType": "Issue"
 								}
 							}
 						}
@@ -528,7 +528,7 @@
                                     "account": "[parameters('azureDevOpsOrgName')]",
                                     "areaPathComparison": "Equals",
                                     "iterationPathComparison": "Equals",
-                                    "wiql__System_WorkItemType": "Task"
+                                    "wiql__System_WorkItemType": "Issue"
                                 }
                             }
                         }
