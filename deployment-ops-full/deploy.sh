@@ -100,6 +100,7 @@ echo "*************** Creating oncall storage table. ***************"
 
 export AZURE_STORAGE_KEY=$(az storage account keys list -n $AZURE_STORAGE_ACCT -g $azureResourceGroup --query [0].value -o tsv)
 export AZURE_STORAGE_ACCT=$AZURE_STORAGE_ACCT
+export EMAIL=$EMAIL
 apt-get update -y
 apt-get -y install python3-pip
 pip3 install azure.cosmosdb.table

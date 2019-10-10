@@ -19,6 +19,12 @@
 			"metadata": {
 				"description": "The service principle password is used when deploying the Azure Kubernetes Service cluster."
 			}
+		},
+		"emailAddress": {
+			"type": "string",
+			"metadata": {
+				"description": "The email address that will be used for work items assignment in Azure Boards."
+			}
 		}
 	},
 	"variables": {
@@ -197,6 +203,10 @@
 							{
 								"name": "SECRET",
 								"secureValue": "[parameters('servicePrincipalSecret')]"
+							},
+							{
+								"name": "EMAIL",
+								"secureValue": "[parameters('emailAddress')]"
 							}
 						]
 					}
