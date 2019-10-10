@@ -48,6 +48,6 @@ Scroll to the bottom of the logs to retrieve both the application URL and the co
 
 https://github.com/microsoft/TailwindTraders
 
-https://github.com/neilpeterson/TailwindTraders-Backend
+https://github.com/microsoft/TailwindTraders-Backend
 
-https://github.com/neilpeterson/TailwindTraders-Website
+https://github.com/microsoft/TailwindTraders-Website
