@@ -30,7 +30,8 @@
 		"containerName": "logs",
 		"deploymentImage": "neilpeterson/itt-bootstrap:2.0",
 		"sourceRepo": "https://github.com/neilpeterson/tailwind-reference-deployment-sandbox.git",
-		"entrypoint": "/deployment-ops-full/deploy.sh"
+		"entrypoint": "/deployment-ops-full/deploy.sh",
+		"statusPageName": "[concat('status-',uniqueString(resourceGroup().id))]"
 	},
 	"resources": [{
 			"type": "Microsoft.ManagedIdentity/userAssignedIdentities",
@@ -132,7 +133,7 @@
 				},
 				"parameters": {
 					"siteName": {
-						"value": "[reference('linkedTemplateTailwind').outputs.storageAccountName.value]"
+						"value": "[variables('statusPageName')]"
 					},
 					"storageAccountName": {
 						"value": "[reference('linkedTemplateTailwind').outputs.storageAccountName.value]"
