@@ -25,7 +25,7 @@ The Tailwind status page can be reached at the App Service URL.
 ## How is this deployment structured
 
 ```
-azuredeploy.jsonL parameter value intake and calls all linked deployments
+azuredeploy.json: parameter value intake and calls all linked deployments
     |_azuredeploy-tailwind.json: deploys an AKS cluster and other infrastructure needed for Tailwind
     |_azuredeploy-azd.json: deploys an Azure DevOps organization and project
     |_azuredeploy-logic-apps.json: deploys the OPS20 logic apps and api connections
