@@ -386,6 +386,10 @@
 		"storageAccountKey": {
 			"type": "string",
 			"value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storage_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+		},
+		"applicationInsightsName": {
+			"type": "string",
+			"value": "[variables('components_app_insights_name')]"
 		}
 	}
 }
