@@ -15,10 +15,10 @@ table_service.create_table(table_name)
 table_service.create_table(status_table_name)
 
 first = {'PartitionKey': '1', 'RowKey': '1',
-        'email': 'jahand@microsoft.com', 'handle': '@JasonHand', 'oncall': True, 'pagingpref': 'push'}
+        'email': 'jahand@microsoft.com', 'handle': '@JasonHand', 'oncall': False, 'pagingpref': 'push'}
 
 second = {'PartitionKey': '1', 'RowKey': '2',
-        'email': 'nepeters@microsoft.com', 'handle': '@nepeters', 'oncall': False, 'pagingpref': 'pager'}
+        'email': 'nepeters@microsoft.com', 'handle': '@nepeters', 'oncall': True, 'pagingpref': 'pager'}
 
 table_service.insert_entity(table_name, first)
 table_service.insert_entity(table_name, second)
