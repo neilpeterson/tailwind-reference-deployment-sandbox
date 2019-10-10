@@ -27,10 +27,10 @@ echo "az container logs --name bootstrap-container --resource-group $azureResour
 echo "*************** Connection Information ***************"
 
 # Get backend code
-printf "\n*** Cloning Tailwind code repository... ***\n"
+echo "*************** Cloning Tailwind code repository ***************"
 
-# git clone https://github.com/microsoft/TailwindTraders-Backend.git
-git clone https://github.com/nepeters007/TailwindTraders-Backend.git
+git clone https://github.com/microsoft/TailwindTraders-Backend.git
+git -C TailwindTraders-Backend checkout ed86d5f
 
 # Deploy backend infrastructure
 printf "\n*** Deploying resources: this will take a few minutes... ***\n"
