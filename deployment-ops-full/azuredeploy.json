@@ -148,23 +148,6 @@
 			}
 		},
 		{
-			"name": "linkedTemplateWorkbook",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'linkedTemplateTailwind')]"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "https://raw.githubusercontent.com/neilpeterson/tailwind-reference-deployment-sandbox/master/deployment-ops-full/azuredeploy-workbook.json"
-				},
-				"applicationInsightsName": {
-					"value": "[reference('linkedTemplateTailwind').outputs.applicationInsightsName.value]"
-				}
-			}
-		},
-		{
 			"type": "Microsoft.ContainerInstance/containerGroups",
 			"apiVersion": "2018-10-01",
 			"name": "[variables('aciName')]",
