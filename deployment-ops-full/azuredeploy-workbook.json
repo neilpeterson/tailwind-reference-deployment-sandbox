@@ -12,8 +12,8 @@
   "variables":{
       "workbookDisplayName": "Troubleshooting Guide 1",
       "workbookType": "tsg",
-      "workbookId": "[newGuid()]",
-      "workbookSourceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/microsoft.insights/components/', parameters(appInsightsName))]"
+      "workbookId": "[uniqueString(resourceGroup().id)]",
+      "workbookSourceId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.OperationalInsights/workspaces/', parameters('appInsightsName'))]"
 
   },
   "resources": [
@@ -38,5 +38,5 @@
       "type": "string",
       "value": "[resourceId( 'microsoft.insights/workbooks', variables('workbookId'))]"
     }
-  },
+  }
 }
