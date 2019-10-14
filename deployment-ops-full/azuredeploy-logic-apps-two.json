@@ -29,7 +29,8 @@
 	},
 	"variables": {
 		"name": "ops20main",
-		"location": "[resourceGroup().location]"
+		"location": "[resourceGroup().location]",
+		"singleQuote": "'"
 	},
 	"resources": [{
 			"type": "Microsoft.Web/connections",
@@ -263,7 +264,7 @@
 									}
 								},
 								"method": "patch",
-								"path": "[concat('/@{encodeURIComponent(', parameters('azureDevOpsOrgName'), ')}/_apis/wit/workitems/$@{encodeURIComponent(''Issue'')}')]",
+								"path": "[concat('/@{encodeURIComponent(', variables('singleQuote'), parameters('azureDevOpsProject'), variables('singleQuote'), ')}/_apis/wit/workitems/$@{encodeURIComponent(''Issue'')}')]",
 								"queries": {
 									"account": "[parameters('azureDevOpsOrgName')]"
 								}
