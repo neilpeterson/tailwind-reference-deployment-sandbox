@@ -81,7 +81,8 @@
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Web/connections', 'visualstudioteamservices')]",
-				"[resourceId('Microsoft.Web/connections', 'teams')]"
+				"[resourceId('Microsoft.Web/connections', 'teams')]",
+				"[resourceId('Microsoft.Web/connections', 'azuretables')]"
 			],
 			"properties": {
 				"state": "Enabled",
