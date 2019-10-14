@@ -263,7 +263,7 @@
 									}
 								},
 								"method": "patch",
-								"path": "/@{encodeURIComponent('OPS40-DEMO-055')}/_apis/wit/workitems/$@{encodeURIComponent('Issue')}",
+								"path": "[concat('/@{encodeURIComponent(', parameters('azureDevOpsOrgName'), ')}/_apis/wit/workitems/$@{encodeURIComponent(''Issue'')}')]",
 								"queries": {
 									"account": "[parameters('azureDevOpsOrgName')]"
 								}
