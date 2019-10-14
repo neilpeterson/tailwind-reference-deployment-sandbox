@@ -315,7 +315,7 @@
 								"path": "/_apis/wit/workitems/@{encodeURIComponent(body('Create_a_work_item')?['id'])}",
 								"queries": {
 									"account": "[parameters('azureDevOpsOrgName')]",
-									"project": "Incident Management"
+									"project": "[parameters('azureDevOpsProject')]"
 								}
 							}
 						}
