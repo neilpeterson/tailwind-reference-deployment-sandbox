@@ -16,14 +16,14 @@ CLIENT_SECRET=$(az keyvault secret show --name aksclientSecret --vault-name $KEY
 
 # Get Tailwind Backend repository
 git clone https://github.com/microsoft/TailwindTraders-Backend.git
-cd TailwindTraders-Backend
+# cd TailwindTraders-Backend
 
 # Deploy cluster and other resources
 az group create --name $RESOURCE_GROUP --location eastus
 az deployment group create --template-file ./TailwindTraders-Backend/Deploy/arm/deployment.json --resource-group=$RESOURCE_GROUP --parameters servicePrincipalId=$CLIENT_ID --parameters servicePrincipalSecret=$CLIENT_SECRET --parameters aksVersion=1.18.6
 
 # Generate values file
-pwsh ./TailwindTraders-Backend/Deploy/powershell/Generate-Config.ps1 -RESOURCE_GROUP $RESOURCE_GROUP -outputFile ./twt-backend.yaml
+pwsh ./TailwindTraders-Backend/Deploy/powershell/Generate-Config.ps1 -resourceGroup $RESOURCE_GROUP -outputFile ./twt-backend.yaml
 
 # Get AKS credentials
 AKS_NAME=$(az aks list --resource-group $RESOURCE_GROUP --query [0].name -o tsv)
@@ -31,7 +31,7 @@ az aks get-credentials --name $AKS_NAME --resource-group $RESOURCE_GROUP
 
 # Create AKS secrets / configure auth with ACR_NAME
 ACR_NAME=$(az acr list --resource-group $RESOURCE_GROUP --query [0].name -o tsv)
-pwsh ./TailwindTraders-Backend/Deploy/powershell/Create-Secret.ps1 -RESOURCE_GROUP $RESOURCE_GROUP -acrName $ACR_NAME
+pwsh ./TailwindTraders-Backend/Deploy/powershell/Create-Secret.ps1 -resourceGroup $RESOURCE_GROUP -acrName $ACR_NAME
 
 # Build images and store in ACR_NAME
 cd ./TailwindTraders-Backend/Source # Dockerfile ADD issue, fix later
@@ -42,7 +42,7 @@ az acr build -t login.api:$CONTAINER_TAG -r $ACR_NAME -f ./Services/Tailwind.Tra
 az acr build -t popular-product.api:$CONTAINER_TAG -r $ACR_NAME -f ./Services/Tailwind.Traders.PopularProduct.Api/Dockerfile .
 az acr build -t product.api:$CONTAINER_TAG -r $ACR_NAME -f ./Services/Tailwind.Traders.Product.Api/Dockerfile .
 az acr build -t profile.api:$CONTAINER_TAG -r $ACR_NAME -f ./Services/Tailwind.Traders.Profile.Api/Dockerfile .
-az acr build -t stock.api:$CONTAINER_TAG -r $ACR_NAME ./TailwindTraders-BackendServices/Tailwind.Traders.Stock.Api/
+az acr build -t stock.api:$CONTAINER_TAG -r $ACR_NAME ./Services/Tailwind.Traders.Stock.Api/
 az acr build -t mobileapigw:$CONTAINER_TAG -r $ACR_NAME -f ./ApiGWs/Tailwind.Traders.Bff/Dockerfile .
 az acr build -t webapigw:$CONTAINER_TAG -r $ACR_NAME -f ./ApiGWs/Tailwind.Traders.WebBff/Dockerfile .
 cd ../../ # Dockerfile ADD issue, fix later
@@ -67,7 +67,7 @@ helm install my-tt-webbff -f $CHART_VALUES --set ingress.hosts={$INGRESS} --set 
 
 # Deploy website images to storage
 STORAGE_ACCT_NAME=$(az storage account list -g $RESOURCE_GROUP -o table --query [].name -o tsv)
-pwsh ./TailwindTraders-Backend/Deploy/powershell/Deploy-Pictures-Azure.ps1 -RESOURCE_GROUP $RESOURCE_GROUP -storageName $STORAGE_ACCT_NAME
+pwsh ./TailwindTraders-Backend/Deploy/powershell/Deploy-Pictures-Azure.ps1 -resourceGroup $RESOURCE_GROUP -storageName $STORAGE_ACCT_NAME
 
 # Clone website repository
 # Pinning this to a fork until this PR has been merged https://github.com/microsoft/TailwindTraders-Website/pull/153
